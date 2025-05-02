@@ -4,8 +4,8 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 local SCRIPTRUNNING = true
 local INBOOTSTRAP = false
 local inputDirection = Vector3.new(0, 0, 0)
-local BYPASSKEYSYSTEM = false
-local DEBUG = false
+local BYPASSKEYSYSTEM = true
+local DEBUG = true
 local Version = "1.0.4"
 if DEBUG == true then
     Version = "DEBUG "..Version.." "..math.random(1, 100)
@@ -122,7 +122,7 @@ local function startScript(hasLifeTimeKey)
         TabWidth = 160,
         Size = UDim2.fromOffset(580, 460),
         Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
-        Theme = "Dark",
+        Theme = "Amethyst",
         MinimizeKey = Enum.KeyCode.RightShift -- Used when theres no MinimizeKeybind
     })
 
