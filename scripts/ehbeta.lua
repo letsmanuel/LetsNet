@@ -5,7 +5,7 @@ local SCRIPTRUNNING = true
 local INBOOTSTRAP = false
 local inputDirection = Vector3.new(0, 0, 0)
 local BYPASSKEYSYSTEM = false
-local DEBUG = true
+local DEBUG = false
 local Version = "1.0.4"
 if DEBUG == true then
     Version = "DEBUG "..Version.." "..math.random(1, 100)
@@ -1362,6 +1362,47 @@ local function startScript(hasLifeTimeKey)
         end)
 
 
+        local predictionToggleAimbot = Tabs.AimbotTab:AddToggle("predictionAIMBOT", {Title = "Use Movement Prediction", Default = false })
+
+        predictionToggleAimbot:OnChanged(function()
+            if Options.predictionAIMBOT.Value then
+                local aim_config = _G.JALON_AIMCONFIG or {
+                    Enabled = true,
+                    KeyActivation = Enum.UserInputType.MouseButton2, -- RightClick
+                    CloseKey = Enum.KeyCode.L, -- Close with "L"
+                    
+                    FOV = 175,
+                    TeamCheck = false, -- TeamCheck deaktiviert
+                    DistanceCheck = true,
+                    VisibleCheck = true,
+            
+                    Smoothness = 0.975,
+                    Prediction = {
+                        Enabled = true,
+                        Value = 0.185
+                    }
+                }
+            else
+                local aim_config = _G.JALON_AIMCONFIG or {
+                    Enabled = true,
+                    KeyActivation = Enum.UserInputType.MouseButton2, -- RightClick
+                    CloseKey = Enum.KeyCode.L, -- Close with "L"
+                    
+                    FOV = 175,
+                    TeamCheck = false, -- TeamCheck deaktiviert
+                    DistanceCheck = true,
+                    VisibleCheck = true,
+            
+                    Smoothness = 0.975,
+                    Prediction = {
+                        Enabled = false,
+                        Value = 0.185
+                    }
+                }
+            end
+        end)
+
+
     -- DISABLED DUE TO ANTICHEAT
 
     
@@ -1471,7 +1512,7 @@ local function startScript(hasLifeTimeKey)
         local function playerLowHealthMove(health)
             hasTriggeredemergencyMove = true
             Fluent:Notify({
-                Title = "Emergency!",
+                Title = "Alert!",
                 Content = "Due to low health, you will be teleported to the hospital.",
                 SubContent = "Your health: "..health, -- Optional
                 Duration = 15 -- Set to nil to make the notification not disappear
@@ -1526,7 +1567,7 @@ local function startScript(hasLifeTimeKey)
                     end
                 end
                 anchoredParts = {}
-
+                inputDirection = Vector3.new(0, 0, 0)
 
                 if CARFLYteleportetoSeat == false then
                     CARFLYunflyTeleportLoopInit = CARFLYunflyTeleportLoopInit + 1
