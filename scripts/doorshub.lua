@@ -1,9 +1,5 @@
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 
---asdasdasdasdasd
-
---adasdasdasdas
---asdasdasdasdizgdfiusdoihwoifsodlifsd
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
@@ -53,7 +49,7 @@ local function playNotificationSound()
 end
 
 local function notify(text)
-    if Library and Library:Notify then
+    if Library and Library.Notify then
         Library:Notify(text)
     end
     playNotificationSound()
@@ -72,29 +68,6 @@ LeftGroupBox:AddToggle('speedhack', {
         end
     end
 })
-
--- Speedhack logic
-task.spawn(function()
-    local player = game:GetService('Players').LocalPlayer
-    local char = player.Character or player.CharacterAdded:Wait()
-    local humanoid = char:FindFirstChildOfClass('Humanoid')
-    
-    player.CharacterAdded:Connect(function(newChar)
-        char = newChar
-        humanoid = char:WaitForChild('Humanoid')
-    end)
-
-    while true do
-        task.wait(0.1)
-        if humanoid then
-            if speedBoostOn then
-                humanoid.WalkSpeed = defaultWalkSpeed + speedboostAmount
-            else
-                humanoid.WalkSpeed = defaultWalkSpeed
-            end
-        end
-    end
-end)
 
 -- Watermark
 Library:SetWatermarkVisibility(true)
@@ -140,3 +113,26 @@ SaveManager:LoadAutoloadConfig()
 local Options = getgenv().Options
 local Toggles = getgenv().Toggles
 Library.ToggleKeybind = Options.MenuKeybind
+
+-- Speedhack logic
+task.spawn(function()
+    local player = game:GetService('Players').LocalPlayer
+    local char = player.Character or player.CharacterAdded:Wait()
+    local humanoid = char:FindFirstChildOfClass('Humanoid')
+    
+    player.CharacterAdded:Connect(function(newChar)
+        char = newChar
+        humanoid = char:WaitForChild('Humanoid')
+    end)
+
+    while true do
+        task.wait(0.1)
+        if humanoid then
+            if speedBoostOn then
+                humanoid.WalkSpeed = defaultWalkSpeed + speedboostAmount
+            else
+                humanoid.WalkSpeed = defaultWalkSpeed
+            end
+        end
+    end
+end)
