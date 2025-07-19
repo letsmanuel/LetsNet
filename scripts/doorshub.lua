@@ -9,7 +9,7 @@ local Library = loadstring(game:HttpGet("https://pastebin.com/raw/edJT9EGX", tru
 --Making a window
 local Window = Library:CreateWindow"Window"
 --There is a special property for windows which can be set to false (Window.canInit = false), if done so the window will not be initialized when Library:Init() is called
- 
+ --KUCKUCK GITHUB
 --Making a folder
 Window:AddFolder"Folder"
 --Folders can be used exactly like windows, they can hold all the options, you can even put folders inside of folders inside of folders.. and so on
