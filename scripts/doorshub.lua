@@ -1,112 +1,20 @@
--- New example script written by wally
--- You can suggest changes with a pull request or something
+local Starlight = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Starlight-Interface-Suite/master/Source.lua"))()  
+local NebulaIcons = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Nebula-Icon-Library/master/Loader.lua"))()
 
-local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
+local SpeedboostEnabled = false
+local amountOfSpeedBoost = 0
 
-local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
-local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
-local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+local Window = Starlight:CreateWindow({
+    Name = "LetsNet DOORS",
+    Subtitle = "v1.0",
+    Icon = 123456789,
 
-local defaultWalkSpeed = 16
-local speedboostAmount = 0
-local speedBoostOn = false
+    LoadingSettings = {
+        Title = "Builing the gaming chair!",
+        Subtitle = "by letsnet software",
+    },
 
-local Window = Library:CreateWindow({
-    Title = 'LetsNet - DOORS',
-    Center = true,
-    AutoShow = true,
-    TabPadding = 8,
-    MenuFadeTime = 0.2
+    ConfigurationSettings = { -- Not Implemented Yet
+        FolderName = "letsnetdoorshub"
+    },
 })
-
-local Tabs = {
-    Main = Window:AddTab('Main'),
-    ['UI Settings'] = Window:AddTab('UI Settings'),
-}
-
--- Only keep speedhack UI in Main tab
-local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Speedhack')
-
-LeftGroupBox:AddSlider('speedboost', {
-    Text = 'Speedboost',
-    Default = 0,
-    Min = 0,
-    Max = 5,
-    Rounding = 1,
-    Compact = false,
-    Callback = function(Value)
-        speedboostAmount = Value
-    end
-})
-
-LeftGroupBox:AddToggle('speedhack', {
-    Text = 'Enable Speedhack',
-    Default = false,
-    Tooltip = 'Apply the selected speedhack',
-    Callback = function(Value)
-        speedBoostOn = Value
-    end
-})
-
--- Watermark
-Library:SetWatermarkVisibility(true)
-local FrameTimer = tick()
-local FrameCounter = 0
-local FPS = 60
-local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
-    FrameCounter += 1
-    if (tick() - FrameTimer) >= 1 then
-        FPS = FrameCounter
-        FrameTimer = tick()
-        FrameCounter = 0
-    end
-    Library:SetWatermark(('LetsNet DOORS | %s fps | %s ms'):format(
-        math.floor(FPS),
-        math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
-    ))
-end)
-
-Library:OnUnload(function()
-    WatermarkConnection:Disconnect()
-    print('Unloaded!')
-    Library.Unloaded = true
-end)
-
--- UI Settings
-local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
-MenuGroup:AddButton('Unload', function() Library:Unload() end)
-MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
-Library.ToggleKeybind = Options.MenuKeybind
-
-ThemeManager:SetLibrary(Library)
-SaveManager:SetLibrary(Library)
-SaveManager:IgnoreThemeSettings()
-SaveManager:SetIgnoreIndexes({ 'MenuKeybind' })
-ThemeManager:SetFolder('MyScriptHub')
-SaveManager:SetFolder('MyScriptHub/specific-game')
-SaveManager:BuildConfigSection(Tabs['UI Settings'])
-ThemeManager:ApplyToTab(Tabs['UI Settings'])
-SaveManager:LoadAutoloadConfig()
-
--- Speedhack logic
-task.spawn(function()
-    local player = game:GetService('Players').LocalPlayer
-    local char = player.Character or player.CharacterAdded:Wait()
-    local humanoid = char:FindFirstChildOfClass('Humanoid')
-    
-    player.CharacterAdded:Connect(function(newChar)
-        char = newChar
-        humanoid = char:WaitForChild('Humanoid')
-    end)
-
-    while true do
-        task.wait(0.1)
-        if humanoid then
-            if speedBoostOn then
-                humanoid.WalkSpeed = defaultWalkSpeed + speedboostAmount
-            else
-                humanoid.WalkSpeed = defaultWalkSpeed
-            end
-        end
-    end
-end)
